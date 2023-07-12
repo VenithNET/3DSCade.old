@@ -12,4 +12,4 @@ To-do:
 
 [![Discord](https://tinyurl.com/y7uedc33)](https://discord.gg/VhfM3UncBB)<br>
 https://guilded.gg/TDK<br>
-https://sdkpaint.github.io/T3SCade/
+https://sdkpaint.github.io/TDSCade/
