@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html>
+  
+<!-- Mirrored from www.3dscade.com/main.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Jul 2023 21:45:42 GMT -->
+<head>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no" />
+    <title>3DSCade - Nintendo 3DS games, photos, and apps</title>
+    <script type="text/javascript" src="../ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script src="js/jquery.cycle.all.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            var highlighted;
+            var subitem;
+            var highlight = $("<img>").attr("src", "menus/mask-selected.png").addClass("itemmask");
+
+            window.scrollTo(40,240);
+            window.setInterval(function() { window.scrollTo(40,240); }, 100);
+
+            $("#menu").cycle({
+                fx: 'scrollHorz',
+                timeout: 0,
+                pager:  '#pager',
+                nowrap: true,
+                pagerAnchorBuilder: function(idx, slide) {
+                    return $("<span>").addClass("item");
+                },
+                after: function(currSlideElement, nextSlideElement, options, forwardFlag) {
+                    highlighted = nextSlideElement || currSlideElement;
+                    subitem = forwardFlag ? 0 : 2;
+
+                    $($(highlighted).children()[subitem]).append(highlight);
+                }
+            });
+
+            $("#leftarrow").click(function() { $("#menu").cycle("prev"); });
+            $("#rightarrow").click(function() { $("#menu").cycle("next"); });
+
+            document.body.onblur = function() { window.focus(); }
+
+            $(document).keydown(function(event) {
+
+                if(event.keyCode == 37)
+                {
+                    if(subitem <= 0)
+                    {
+                        $("#menu").cycle("prev");
+                    }
+                    else
+                    {
+                        subitem--;
+                        $($(highlighted).children()[subitem]).append(highlight);
+                    }
+                }
+
+                if(event.keyCode == 39)
+                {
+                    if(subitem >= 2)
+                    {
+                        $("#menu").cycle("next");
+                    }
+                    else
+                    {
+                        subitem++;
+                        $($(highlighted).children()[subitem]).append(highlight);
+                    }
+                }
+
+                if(event.keyCode == 13)
+                {
+                    if($(highlighted).children()[subitem].onclick)
+                    {
+                        $(highlighted).children()[subitem].onclick();
+                    }
+                }
+            });
+        });
+    </script>
+    <style type="text/css">
+      #ad { position: absolute; width: 240px; height: 60px; top: 152px; left: 40px; }
+      #container { position: absolute; background-color: black; top: 0px; left: 0px; width: 400px; height: 480px; }
+      #topscreen { position: absolute; background-color: white; top: 0px; left: 0px; width: 400px; height: 240px; overflow: hidden; }
+      #bottomscreen { position: absolute; background-color: white; top: 240px; left: 40px; width: 320px; height: 240px; overflow: hidden; }
+      #topscreen { background-image: url(images/logo.png); background-position: center center; background-repeat: no-repeat; border-radius: 25px; }
+
+      #version { position: absolute; left: 320px; top: 160px; color: #CCCCCC; }
+      #slogan { position: absolute; left: 50px; top: 160px; color: #AAAAAA; font-style: italic; }
+      #menu { height: 94px; margin-left: 10px; }
+      #pager { width: 220px; text-align: center; margin-left: 50px; }
+      #pager img { margin-left: 8px; margin-right: 8px; }
+      #pager .item { height: 16px; padding: 0px 8px; margin-left: 8px; margin-right: 8px; background: url(images/dotoff.png) no-repeat; }
+      #pager .activeSlide { background-image: url(images/doton.png); }
+
+      .reset { font-size: 4pt; opacity: 0; }
+      .doublebar { border-top: 1px solid #CCCCCC; border-bottom: 1px solid #CCCCCC; height: 1px; }
+      .arrow { width: 50px; text-align: center; }
+
+      .menuitem { width: 88px; float: left; margin: 2px 6px; text-align: center; font-size: 60%; font-family: Helvetica, Arial, sans-serif; position: relative; }
+      .menuitem .itemimage { width: 80px; height: 70px; border: 4px solid transparent; }
+      .menuitem .itemtext { width: 88px; margin-top: 0px; }
+      .menuitem .itemmask { position: absolute; top: 0px; left: 0px; width: 88px; height: 78px; z-index: 10; }
+
+      .page { display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="topscreen">
+          <div id="slogan">"More power, more fun!"</div>
+          <div id="version">v0.3</div>
+      </div>
+      <div id="bottomscreen">
+        <a class="reset" href="javascript:window.scrollTo(40,240);" onfocus="this.blur();">.</a>
+        <div class="doublebar"></div>
+        <div id="menu">
+            <div class="page">
+                <div class="menuitem" onclick="window.location = 'snake/index.html'">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/snake.png)">&nbsp;</div>
+                    <div class="itemtext">Snake</div>
+                </div>
+                <div class="menuitem" onclick="window.location = 'album/index.html'">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/album.png)">&nbsp;</div>
+                    <div class="itemtext">3D Photos</div>
+                </div>
+                <div class="menuitem" onclick="window.location = 'terraintumbler/index.html'">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/terraintumbler.png)">&nbsp;</div>
+                    <div>Terrain Tumbler</div>
+                </div>
+            </div>
+            <div class="page">
+                <div class="menuitem" onclick="window.location = 'platformer/index.html'">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/platformer.png)">&nbsp;</div>
+                    <div>Platypus Platformer</div>
+                </div>
+                <div class="menuitem">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/comingsoon.png)">&nbsp;</div>
+                    <div>Coming Soon</div>
+                </div>
+                <div class="menuitem">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/comingsoon.png)">&nbsp;</div>
+                    <div>Coming Soon</div>
+                </div>
+            </div>
+            <div class="page">
+                <div class="menuitem">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/comingsoon.png)">&nbsp;</div>
+                    <div>Coming Soon</div>
+                </div>
+                <div class="menuitem">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/comingsoon.png)">&nbsp;</div>
+                    <div>Coming Soon</div>
+                </div>
+                <div class="menuitem">
+                    <img class="itemmask" src="menus/mask-gray.png" border="0">
+                    <div class="itemimage" style="background-image: url(menus/comingsoon.png)">&nbsp;</div>
+                    <div>Coming Soon</div>
+                </div>
+            </div>
+        </div>
+        <div class="doublebar"></div>
+        <div style="margin-top: 8px;">
+            <div id="leftarrow" class="arrow" style="float: left;"><img src="images/leftarrow.png"></div>
+            <div id="rightarrow" class="arrow" style="float: right;"><img src="images/rightarrow.png"></div>
+            <div id="pager"></div>
+        </div>
+          
+        <div id="ad" align="center">
+          <script type="text/javascript"><!--
+            google_ad_client = "pub-4389030281766837";
+            /* 3DSCade 234x60, created 6/9/11 */
+            google_ad_slot = "5830001736";
+            google_ad_width = 234;
+            google_ad_height = 60;
+            //-->
+            </script>
+            <script type="text/javascript"
+            src="../pagead2.googlesyndication.com/pagead/f.txt">
+          </script>
+        </div>
+      </div>
+    </div>
+  </body>
+
+<!-- Mirrored from www.3dscade.com/main.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Jul 2023 21:45:54 GMT -->
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+
+<html>
+  
+<!-- Mirrored from www.3dscade.com/snake/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Jul 2023 21:45:55 GMT -->
+<head>
+    <meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no" />
+    <title>3DS Snake</title>
+    <script type="text/javascript" src="../../ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script src="jquery.cycle.all.min.js"></script>
+    <script src="snake.js"></script>
+    <script>
+        $(document).ready(function() {
+            window.scrollTo(40,240);
+            window.setInterval(function() { window.scrollTo(40,240); }, 100);
+
+            $("#demo").show().cycle({
+                fx:'fade',
+                speed: 2500,
+                timeout: 5000,
+                random: 1,
+                delay: -2500
+            });
+        });
+
+        var menuImages = { total: 2, loaded: 0 };
+
+        function imageLoaded()
+        {
+            menuImages.loaded++;
+
+            if(menuImages.loaded >= menuImages.total)
+            {
+                $("#menuButtons").fadeIn(1500, function() {
+                    // do something?
+                });
+            }
+        }
+
+        function startGame()
+        {
+            $('#demo').cycle('pause');
+
+            $("#menuButtons").fadeOut('fast', function() {
+                $("#gameButtons").fadeIn('slow', function() {
+                    $('#demo').fadeOut('fast', function() {
+                        SNAKE.start();
+                    });
+                });
+            });
+        }
+
+        function pauseGame()
+        {
+            SNAKE.pause();
+            
+            if(SNAKE.isPaused()) $("#pause").hide();
+            else $("#pause").show();
+
+            if(SNAKE.isPaused()) $("#resume").show();
+            else $("#resume").hide();
+        }
+
+        function endGame()
+        {
+            var answer = true;
+
+            if(!SNAKE.isGameOver())
+            {
+                if(!SNAKE.isPaused()) pauseGame();
+
+                answer = window.confirm("Are you sure you want to end your game?");
+            }
+
+            if(answer)
+            {
+                $("#readyMessage").hide();
+                $("#crashMessage").hide();
+                $("#gameOverMessage").hide();
+
+                $("#gameButtons").fadeOut('fast', function() {
+                    $("#menuButtons").fadeIn('slow', function() {
+                        $('#demo').fadeIn('fast', function() {
+                            $('#demo').cycle('resume');
+                            $("#resume").hide();
+                            $("#pause").show();
+                            
+                            SNAKE.init();
+                        });
+                    });
+                });
+            }
+        }
+    </script>
+    <style type="text/css">
+      #container { position: absolute; background-color: black; top: 0px; left: 0px; width: 400px; height: 480px; }
+      #topscreen { position: absolute; background-color: white; top: 0px; left: 0px; width: 400px; height: 240px; overflow: hidden; }
+      #bottomscreen { position: absolute; background: white url(logo.png) no-repeat 20px 50px; top: 240px; left: 40px; width: 320px; height: 240px; overflow: hidden; }
+
+      #livesbg { position: absolute; top: 0px; left: 0px; background-color: black; color: white; width: 100%; height: 24px; text-align: center; padding-top: 8px; }
+      #livesbg img { margin-right: 5px; }
+
+      #scoreText, #levelText { position: absolute; top: 5px; font-family: monospace; background-color: black; color: white;  }
+      #scoreText { right: 10px; text-align: right; }
+      #levelText { left: 10px; text-align: left; }
+
+      #gameButtons { position: absolute; bottom: 50px; left: 20px; width: 280px; text-align: center; display: none; }
+      #gameButtons img { margin-right: 15px; }
+
+      #menuButtons { position: absolute; bottom: 50px; left: 20px; width: 280px; text-align: center; display: none; }
+      #menuButtons img { margin-right: 15px; }
+
+      #demo { position: absolute; top: 20px; left: 0px; display: none; }
+      #readyMessage, #crashMessage, #gameOverMessage { display: none; position: absolute; left: 160px; top: 100px; width: 75px; border: 4px solid white; background-color: red; color: white; text-align: center; padding: 4px; font-family: monospace; font-weight: 900; z-index: 10; }
+
+      .reset { font-size: 4pt; opacity: 0; }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <div id="topscreen">
+          <canvas id="game" width="400" height="240"></canvas>
+          <div id="demo">
+              <img src="demo1.png" width="400" height="220">
+              <img src="demo2.png" width="400" height="220">
+              <img src="demo3.png" width="400" height="220">
+          </div>
+          <div id="readyMessage">Ready?</div>
+          <div id="crashMessage">Ouch!</div>
+          <div id="gameOverMessage">GAME OVER</div>
+      </div>
+      <div id="bottomscreen">
+        <a class="reset" href="javascript:window.scrollTo(40,240);" onfocus="this.blur();">.</a>
+
+        <div id="livesbg"></div>
+        <div id="scoreText">Score: <span id="score">0</span></div>
+        <div id="levelText">Level: <span id="level">1</span></div>
+        <div id="gameButtons">
+            <img id="pause" src="pause.png" onclick="pauseGame();">
+            <img id="resume" src="resume.png" onclick="pauseGame();" style="display: none;">
+            <img src="menu.png" onclick="endGame();">
+        </div>
+        <div id="menuButtons">
+            <img src="start.png" onclick="startGame();" onload="imageLoaded('menu')">
+            <img src="exit.png" onclick="window.location = '../main.html'" onload="imageLoaded('menu')">
+        </div>
+      </div>
+    </div>
+  </body>
+
+<!-- Mirrored from www.3dscade.com/snake/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Jul 2023 21:45:59 GMT -->
+</html>

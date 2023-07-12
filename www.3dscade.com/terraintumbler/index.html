@@ -1,0 +1,423 @@
+<html>
+
+<!-- Mirrored from www.3dscade.com/terraintumbler/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Jul 2023 21:45:59 GMT -->
+<head>
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; minimum-scale=1.0; maximum-scale=1.0; user-scalable=no" />
+	<script type="text/javascript">
+		window.scrollTo(40,240);
+		window.setInterval(function() { window.scrollTo(40,240); }, 100);
+	</script>
+	<style type="text/css">
+		body{
+			background-color:black;
+			font-family:"Lucida Console";
+		}
+		div {
+			display:none;
+		}
+		#start {
+			text-align:center;
+			background-color:#4455ff;
+			border: 1px solid black;
+			margin:40%;
+			margin-top:0;
+			margin-bottom:0;
+		}
+		#help {
+			margin-left:37px;
+			margin-right:37px;
+			display:block;
+			text-align:center;
+			color:white;
+			padding:5px;
+			padding-top:2px;
+		}
+		#hud {
+			display:block;
+			visibility:visible;
+			position:absolute; 
+			top:240; 
+			left:40;
+			width:320;
+			height:30;
+			font-size:20px;
+			background-color:white;
+			color:black;
+		}
+		#loading {
+			display:block;
+		}
+		.reset{ font-size: 4pt; opacity: 0; position:absolute; width:400; height:480; left:0; top:0;}
+		.reset2{ font-size: 4pt; opacity: 0; position:absolute; width:400; height:50; left:0; top:430;}
+	</style>
+	<script type="text/javascript" src="terraintumbler_physics.js"></script>
+		<script type="text/javascript">
+		var upKey=false, downKey=false, aKey=false;
+		window.addEventListener("keydown", keyDown, false);
+		window.addEventListener("keyup", keyUp, false);
+		
+		var interval, levels, levelCurrent, level, background, wheel1, wheel2, wheelImg1, wheelImg2, carImg, coin, coinx, coiny, cointaken, coins, viewX, col, loadedImgs;
+		loadedImgs=0;
+		function init(){
+			document.getElementById("loading").style.display="none";
+			document.getElementById("bgdiv").style.display="none";
+			document.getElementById("bgdiv").style.visibility="visible";
+			
+			
+			levels=2;
+			levelCurrent=-1;
+			level=new Array();
+			level[0]={};
+			level[0].ylist=[127,127,124,120,120,121,125,130,132,131,125,121,117,102,86,103,118,122,124,127,128,131,126,113,100,94,93,95,99,103,108,114,121,126,129,127,123,110,92,79,73,68,64,61,60,61,74,108,118,125,129,130,134,135,135,134,127,127,121,117,113,97,81,97,113,115,117,114,117,115,116];
+			level[1]={};
+			level[1].ylist=[110,110,112,130,131,131,131,131,132,130,118,102,91,91,92,92,92,92,104,118,121,122,124,124,123,121,117,110,102,97,89,82,75,61,41,48,56,60,64,68,71,74,74,76,76,77,77,66,66,64,66,69,68,77,93,106,108,110,110,110,107,94,94,92,92,92,93,82,68,68,68];
+			level[2]={};
+			level[2].ylist=[-271,62,62,63,130,134,135,136,137,137,137,134,122,103,102,99,99,115,122,128,132,132,131,124,102,64,64,64,65,65,91,106,116,116,110,96,88,86,88,92,96,94,83,73,53,30,20,23,51,70,86,98,109,117,125,130,133,131,123,109,86,88,89,102,116,131,136,136,75,70,-180];
+			level[3]={};
+			level[3].ylist=[73,73,72,72,72,72,65,50,62,71,81,88,95,101,107,112,117,120,123,123,119,115,110,104,99,94,88,81,105,117,120,123,120,112,91,95,97,99,100,98,90,76,88,97,101,97,104,105,98,104,102,97,101,100,93,82,59,73,77,77,77,77,70,55,75,86,86,87,89,86,77];
+			background = document.getElementById("background");
+			
+			wheel1={radius:12, grounded:0, x:32, y:0, hspeed:0, vspeed:0};
+			wheel2={radius:10, grounded:0, x:64, y:2, hspeed:0, vspeed:0};
+			
+			wheelImg1=document.getElementById("wheel1");
+			wheelImg1.style.position="absolute";
+			wheelImg2=document.getElementById("wheel2");
+			wheelImg2.style.position="absolute";
+			carImg=document.getElementById("car");
+			carImg.style.position="absolute";
+			coin = new Array();
+			coinx = new Array();
+			coiny = new Array();
+			cointaken = new Array();
+			coin[0]=document.getElementById("coin1");
+			coin[1]=document.getElementById("coin2");
+			coin[2]=document.getElementById("coin3");
+			coin[3]=document.getElementById("coin4");
+			coin[4]=document.getElementById("coin5");
+			for(var n=0; n<5;n++){
+				coin[n].style.position="absolute";
+			}
+		}
+		function loadLevel(){
+			document.getElementById("bgdiv").style.display="none";
+			levelCurrent++;
+			viewX=0;
+			wheel1.hspeed=0;
+			wheel1.vspeed=0;
+			wheel1.grounded=0;
+			wheel2.hspeed=0;
+			wheel2.vspeed=0;
+			wheel2.grounded=0;
+			coins=0;
+			
+			document.getElementById("loading").style.display="block";
+			switch(levelCurrent){
+				case 0://Level1
+					coinx = [165,438,928,1097,560];
+					coiny = [71,70,52,50,76];
+					cointaken = [0,0,0,0,0];
+					wheel1.x=20;
+					wheel1.y=112;
+					wheel2.x=20+25;
+					wheel2.y=110;
+					background.src="graphics/level1.gif";
+					document.getElementById("hud").innerHTML="Level 1/4 - Collect coins"
+					break;
+				case 1://Level2
+					coinx = [246,681,402,230,1034];
+					coiny = [63,27,59,84,54];
+					cointaken = [0,0,0,0,0];
+					wheel1.x=46;
+					wheel1.y=70;
+					wheel2.x=47;
+					wheel2.y=70+25;
+					background.src="graphics/level2.gif";
+					document.getElementById("hud").innerHTML="Level 2/4 - Collect coins"
+					break;
+				case 2://Level3
+					coinx = [29,1040,430,614,166];
+					coiny = [46,38,56,32,60];
+					cointaken = [0,0,0,0,0];
+					wheel1.x=80;
+					wheel1.y=120;
+					wheel2.x=80+24;
+					wheel2.y=125;
+					background.src="graphics/level3.gif";
+					document.getElementById("hud").innerHTML="Level 3/4 - Collect coins"
+					break;
+				case 3://Level4
+					coinx = [491,8,950,613,762];
+					coiny = [111,14,16,40,48];
+					cointaken = [0,0,0,0,0];
+					wheel1.x=20;
+					wheel1.y=60;
+					wheel2.x=20+25;
+					wheel2.y=60;
+					background.src="graphics/level4.gif";
+					document.getElementById("hud").innerHTML="Level 4/4 - Collect coins"
+					break;
+			}
+			for(var n=0; n<5;n++){
+				coin[n].style.left=(coinx[n]-viewX-8);
+				coin[n].style.top=(coiny[n]-8);
+				coin[n].style.display="block";
+			}
+			//Set position of game sprites
+			wheelImg1.style.left=(wheel1.x-12-viewX)|0;
+			wheelImg1.style.top=(wheel1.y-12)|0;
+			wheelImg2.style.left=(wheel2.x-10-viewX)|0;
+			wheelImg2.style.top=(wheel2.y-10)|0;
+			carImg.style.left=((wheel2.x+wheel1.x)/2-8-viewX)|0;
+			carImg.style.top=((wheel2.y+wheel1.y)/2-8)|0;
+			background.style.left=(-viewX);
+		}
+		function levelLoaded(){
+			if (interval!=null){
+				clearInterval(interval);
+				window.scrollTo(40,240);
+			}
+			interval=this.setInterval("update()",90);
+			document.getElementById("bgdiv").style.display="block";
+			document.getElementById("loading").style.display="none";
+			document.getElementById("hud").style.display="block";
+			document.getElementById('button').style.backgroundColor="#00006E";
+			document.getElementById('button').style.borderColor="gray";
+			document.getElementById('button').innerHTML="";
+			
+		}		
+		function gameEnd(){
+			if (interval!=null)
+				clearInterval(interval);
+			document.getElementById("endGame").style.display="block";
+			document.getElementById("bgdiv").style.display="none";
+			document.getElementById("hud").innerHTML="";
+			document.getElementById('button').style.display="block";
+			document.getElementById('button').innerHTML="Go to title";
+		}	
+		function goToTitle(){
+			levelCurrent=-1;
+			document.getElementById("bgdiv").style.display="none";
+			document.getElementById("endGame").style.display="none";
+			document.getElementById("menu").style.display="block";
+			document.getElementById("hud").innerHTML="";
+			document.getElementById("hud").style.backgroundColor="white";
+			document.getElementById("hud").style.color="black";
+			document.getElementById('button').innerHTML="Start";
+		}
+		function update(){
+			//Controls/gameplay
+			
+			wheel1.vspeed+=0.5;
+			wheel2.vspeed+=0.5;
+			
+			var xx, yy, dis, hs, vs, hh, s;
+			xx=wheel2.x+wheel2.hspeed-wheel1.x-wheel1.hspeed;
+			yy=wheel2.y+wheel2.vspeed-wheel1.y-wheel1.vspeed;
+			dis=Math.sqrt(xx*xx+yy*yy);
+			
+			hs=xx*(dis-25)/dis/2;
+			vs=yy*(dis-25)/dis/2;
+			wheel1.hspeed+=hs;
+			wheel1.vspeed+=vs;
+			wheel2.hspeed-=hs;
+			wheel2.vspeed-=vs;
+
+			xx/=dis;
+			yy/=dis;
+			hh=downKey-upKey;
+			s=Math.abs(xx*2);
+			if (s<0.75)
+				s=0.75;
+			else if (s>1.25)
+				s=1.25;
+			hh*=s*0.5;
+			hs=-yy*hh;
+			vs=xx*hh;
+			wheel1.hspeed+=hs;
+			wheel1.vspeed+=vs;
+			wheel2.hspeed-=hs;
+			wheel2.vspeed-=vs;
+
+			if (aKey){
+				if (wheel1.grounded){
+					wheel1.hspeed+=xx*0.5;
+					wheel1.vspeed+=yy*0.5;
+				}
+				if (wheel2.grounded){
+					wheel2.hspeed+=xx*0.5;
+					wheel2.vspeed+=yy*0.5;
+				}
+			}
+			
+			//Limit speed
+			s=Math.sqrt(wheel1.hspeed*wheel1.hspeed+wheel1.vspeed*wheel1.vspeed);
+			if (s>wheel1.radius*0.9){
+				wheel1.hspeed*=wheel1.radius*0.9/s;
+				wheel1.vspeed*=wheel1.radius*0.9/s;
+			}
+			s=Math.sqrt(wheel2.hspeed*wheel2.hspeed+wheel2.vspeed*wheel2.vspeed);
+			if (s>wheel2.radius*0.9){
+				wheel2.hspeed*=wheel2.radius*0.9/s;
+				wheel2.vspeed*=wheel2.radius*0.9/s;
+			}
+			//Collision
+			
+			//wheel1
+			wheel1.lines=collision_prepare(wheel1.x,wheel1.y,12,wheel1.hspeed,wheel1.vspeed)
+			//Check for collision, and react accordingly
+			col=collision_test(wheel1.x,wheel1.y,12,wheel1.hspeed,wheel1.vspeed);
+			if (col) wheel1.grounded=1;
+			else wheel1.grounded=0;
+
+			var checks;
+			for(checks=0; checks<5 && col; checks++){
+				collision_reaction(wheel1.x,wheel1.y,12,wheel1.hspeed,wheel1.vspeed);
+				wheel1.hspeed+=colhs;
+				wheel1.vspeed+=colvs;
+				col=collision_test(wheel1.x,wheel1.y,12,wheel1.hspeed,wheel1.vspeed);
+			}
+			wheel1.x+=wheel1.hspeed;
+			wheel1.y+=wheel1.vspeed;
+			if (wheel1.x<12){
+				wheel1.x=12;
+				wheel1.hspeed=0;
+			} else if (wheel1.x>1108){
+				wheel1.x=1108;
+				wheel1.hspeed=0;
+			}
+			//wheel2
+			wheel2.lines=collision_prepare(wheel2.x,wheel2.y,10,wheel2.hspeed,wheel2.vspeed)
+			//Check for collision, and react accordingly
+			col=collision_test(wheel2.x,wheel2.y,10,wheel2.hspeed,wheel2.vspeed);
+			if (col) wheel2.grounded=1;
+			else wheel2.grounded=0;
+
+			var checks;
+			for(checks=0; checks<5 && col; checks++){
+				collision_reaction(wheel2.x,wheel2.y,10,wheel2.hspeed,wheel2.vspeed);
+				wheel2.hspeed+=colhs;
+				wheel2.vspeed+=colvs;
+				col=collision_test(wheel2.x,wheel2.y,10,wheel2.hspeed,wheel2.vspeed);
+			}
+			wheel2.x+=wheel2.hspeed;
+			wheel2.y+=wheel2.vspeed;
+			if (wheel2.x<10){
+				wheel2.x=10;
+				wheel2.hspeed=0;
+			} else if (wheel2.x>1110){
+				wheel2.x=1110;
+				wheel2.hspeed=0;
+			}
+			
+			//Collecting coins
+			for(n=0;n<5;n++){
+				if (cointaken[n]==0){
+					xx=(wheel1.x+wheel2.x)/2-coinx[n];
+					yy=(wheel1.y+wheel2.y)/2-coiny[n];
+					if (xx*xx+yy*yy<400){
+						cointaken[n]=1;
+						coin[n].style.display="none";
+						coins++;
+						if (coins==5){
+							document.getElementById("button").style.backgroundColor="blue";
+							document.getElementById("button").style.borderColor="white";
+							document.getElementById('button').innerHTML="Proceed";
+							document.getElementById("hud").innerHTML="Level complete!";
+						}
+					}
+						
+				}
+			}
+			var fac=240/140;
+			viewX=Math.max(0,Math.min((wheel1.x+wheel2.x)/2-120,1120-234))|0;
+			
+			wheelImg1.style.left=(wheel1.x-13-viewX)*fac;
+			wheelImg1.style.top=((wheel1.y-13)*fac);
+			wheelImg2.style.left=(wheel2.x-10-viewX)*fac;
+			wheelImg2.style.top=((wheel2.y-10)*fac);
+			
+			carImg.style.left=((wheel2.x+wheel1.x)/2-8-viewX)*fac;
+			carImg.style.top=(((wheel2.y+wheel1.y)/2-8)*fac);
+			
+			for(var n=0; n<5;n++){
+				coin[n].style.left=(coinx[n]-viewX-8)*fac;
+				coin[n].style.top=(coiny[n]-8)*fac;
+			}
+			background.style.left=(-viewX*fac)|0;
+			
+			
+		}
+		function imgLoaded(){
+			loadedImgs++;
+			if (loadedImgs==4)
+				init();
+		}
+		
+		function keyDown(e){
+			var keyCode = e.keyCode;
+			switch(keyCode)
+			{
+				case 39:
+					upKey=1; break;
+				case 37:
+					downKey=1; break;
+				case 13:
+					aKey=1; break;
+			}
+		}
+		function keyUp(e){
+			var keyCode = e.keyCode;
+			switch(keyCode)
+			{
+				case 39:
+					upKey=0; break;
+				case 37:
+					downKey=0; break;
+				case 13:
+					aKey=0; break;
+			}
+		}
+	</script>
+</head>
+<body id="body" style=" margin:0;">
+<a class="reset" href="javascript:window.scrollTo(40,240);" onfocus="this.blur();">.</a>
+<!--Menu/Title screen-->
+	<div id="menu" style="left:0; top:0; width:400; height:240; display:block; background-image:url(graphics/title.gif); background-repeat:no-repeat; margin:0; position:absolute;">
+	</div>
+<!--Game Ending-->
+	<div id="endGame" onmousedown="goToTitle()" style="width:400; height:240; background-image:url(graphics/background2.gif); margin:0; position:absolute; top:0px; left:0px;">
+		<br />
+		<div id="help" style="font-size:30px;">
+			<br/>
+			Well done, you completed the game!
+		</div>
+	</div>
+<!--Game Screen-->
+	<div id="bgdiv" onmousedown="if (coins==5) {if (levelCurrent==3){gameEnd();} else {loadLevel(); document.getElementById('hud').style.display='none'}}" style="display:block; visibility:hidden; width:400; height:240; overflow:hidden; margin:0; position:absolute; top:0px; left:0px;">
+		<img id="background" src="#" style="position:absolute; top:0px; left:0px" onload="levelLoaded()"/>
+		<img id="coin1" src="graphics/coin.gif" onload="imgLoaded()"/>
+		<img id="coin2" src="graphics/coin.gif"/>
+		<img id="coin3" src="graphics/coin.gif"/>
+		<img id="coin4" src="graphics/coin.gif"/>
+		<img id="coin5" src="graphics/coin.gif"/>
+		<img id="car" src="graphics/car.gif" onload="imgLoaded()"/>
+		<img id="wheel1" src="graphics/wheel1.gif" onload="imgLoaded()"/>
+		<img id="wheel2" src="graphics/wheel2.gif" onload="imgLoaded()"/>
+	</div>
+<!--Hud/Info-->	
+	<div id="hud"></div>
+	<div id="button" onmousedown="if(levelCurrent==-1){levelCurrent=-1; loadLevel(); document.getElementById('menu').style.display='none'; } else {if (coins==5) {if (levelCurrent==3){gameEnd(); levelCurrent++;} else if (levelCurrent==4) goToTitle(); else {loadLevel();}}}"  style="display:block; border:2px solid white; background-color:blue; width:100px; height:40px; position:absolute; top:280; left:80; text-align:center; padding-top:20px; color:white;" >Start</div>
+	<div id="restartbutton" onclick="goToTitle();" style="position:absolute; color:white; display:block; padding:10px; background-color:green; border:2px solid white; left:260; top:300;">Restart</div>
+	<div id="backbutton" onclick="window.location = '../main.html'" style="position:absolute; color:white; display:block; padding:10px; background-color:maroon; border:2px solid white; left:275; top:360;">Exit</div>
+	<div id="controls" style="display:block; color:white; position:absolute; top:350; left:80; height:102;">Controls:<br/><br/>Left/Right: Flip<br/> A: Accelerate</div>
+	<!--Loading screen-->
+	<div id="loading" style="display:block; width:400; height:240; text-align:center; color:gray; font-size:20px; background-color:black; position:absolute; top:0px; left:0px;">
+		<br/><br></br>
+		Loading
+	</div>
+	<a class="reset2" href="javascript:window.scrollTo(40,240);" onfocus="this.blur();">.</a>
+</body>
+
+<!-- Mirrored from www.3dscade.com/terraintumbler/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 11 Jul 2023 21:46:21 GMT -->
+</html>

@@ -1,0 +1,17 @@
+HTTrack3.49-2+htsswf+htsjava launched on Tue, 11 Jul 2023 17:45:41 at http://www.3dscade.com/main.html +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar
+(winhttrack -qYC2%Ps2u1%s%uN0%I0p3DaK0H0%kf2A25000%f#f -F "Mozilla/4.5 (compatible; HTTrack 3.0x; Windows 98)" -%F "<!-- Mirrored from %s%s by HTTrack Website Copier/3.x [XR&CO'2014], %s -->" -%l "en, *" -Y http://www.3dscade.com/main.html -O1 "E:\New folder\TDKCADE\3DSCADE" +*.png +*.gif +*.jpg +*.jpeg +*.css +*.js -ad.doubleclick.net/* -mime:application/foobar )
+
+Information, Warnings and Errors reported for this mirror:
+note:	the hts-log.txt file, and hts-cache folder, may contain sensitive information,
+	such as username/password authentication for websites mirrored in this project
+	do not share these files/folders if you want these information to remain private
+
+17:45:59	Warning: 	Retry after error 500 (Internal Server Error) at link www.3dscade.com/album/index.jsp (from www.3dscade.com/main.html)
+17:46:21	Warning: 	Retry after error 500 (Internal Server Error) at link www.3dscade.com/platformer/index.jsp (from www.3dscade.com/main.html)
+17:46:21	Warning: 	Retry after error 500 () at link www.3dscade.com/album/index.jsp (from www.3dscade.com/main.html)
+17:46:22	Warning: 	Retry after error 500 () at link www.3dscade.com/platformer/index.jsp (from www.3dscade.com/main.html)
+17:46:22	Error: 	"" (500) after 2 retries at link www.3dscade.com/album/index.jsp (from www.3dscade.com/main.html)
+17:46:22	Error: 	"" (500) after 2 retries at link www.3dscade.com/platformer/index.jsp (from www.3dscade.com/main.html)
+
+HTTrack Website Copier/3.49-2 mirror complete in 41 seconds : 48 links scanned, 41 files written (886729 bytes overall) [880533 bytes received at 21476 bytes/sec], 29574 bytes transferred using HTTP compression in 3 files, ratio 29%
+(2 errors, 4 warnings, 0 messages)
